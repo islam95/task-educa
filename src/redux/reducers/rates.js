@@ -6,10 +6,10 @@ const INITIAL_STATE = {
 
 const Rates = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case Types.FETCH_DATA_SUCCESS:
+    case Types.FETCH_RATES_SUCCESS:
       return { ...state, rates: action.rates };
 
-    case Types.FETCH_DATA_ERROR:
+    case Types.FETCH_RATES_ERROR:
       return { ...state, rates: [], error: action.error };
 
     default:
