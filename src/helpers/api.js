@@ -11,11 +11,6 @@ const instance = axios.create({
 
 // Get all latest rates
 export const getRates = async () => {
-  try {
-    const { data } = await instance.get(`${baseUrl}/latest.json`);
-    console.log("Data", data);
-    return data;
-  } catch (error) {
-    console.error("Error occured in api call", error);
-  }
+  const { data } = await instance.get(`${baseUrl}/latest.json`);
+  return data;
 };

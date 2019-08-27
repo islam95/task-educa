@@ -4,11 +4,6 @@ import { fetchData } from "../redux/actions/ratesAction";
 import "../styles/css/App.css";
 
 class App extends React.Component {
-
-  componentDidMount() {
-    this.fetchApiData();
-  }
-
   fetchApiData = async () => {
     await this.props.onGetRates();
   };
@@ -20,6 +15,7 @@ class App extends React.Component {
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
+          <button onClick={this.fetchApiData}>Get Rates</button>
         </header>
       </div>
     );
@@ -27,7 +23,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = ({ rates }) => ({
-  rates: rates
+  rates: rates,
+  getRatesError: rates.error
 });
 
 const mapDispatchToProps = dispatch => ({
