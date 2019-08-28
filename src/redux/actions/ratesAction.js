@@ -7,9 +7,17 @@ export const fetchData = () => {
     try {
       const response = await api.getRates();
       const { rates } = response;
+      const newRates = Object.keys(rates).map((code, key) => {
+        return {
+          key,
+          code,
+          rate: rates[code].toFixed(2)
+        };
+      });
+      localStorage.setItem("rates", JSON.stringify(newRates));
       dispatch({
         type: Types.FETCH_RATES_SUCCESS,
-        rates,
+        rates: newRates,
         response
       });
     } catch (error) {
@@ -21,15 +29,26 @@ export const fetchData = () => {
   };
 };
 
-// Check local storage 
+// Check local storage
 export const checkLocalStorage = () => {
   return async dispatch => {
     const rates = localStorage.getItem("rates");
     if (rates) {
       dispatch({
         type: Types.FETCH_RATES_SUCCESS,
-        response: JSON.parse(rates)
+        rates: JSON.parse(rates)
       });
     }
   };
 };
+
+export const deleteRate = key => {
+  return { type: Types.DELETE_RATE, key };
+};
+
+export const addRate = (key, code, rate) => ({
+  type: Types.ADD_RATE,
+  key,
+  code,
+  rate
+});

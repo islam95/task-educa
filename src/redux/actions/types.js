@@ -1,3 +1,6 @@
 export const FETCH_RATES = "FETCH_RATES";
 export const FETCH_RATES_SUCCESS = "FETCH_RATES_SUCCESS";
 export const FETCH_RATES_ERROR = "FETCH_RATES_ERROR";
+
+export const ADD_RATE = "ADD_RATE";
+export const DELETE_RATE = "DELETE_RATE";

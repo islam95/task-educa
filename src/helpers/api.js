@@ -18,7 +18,6 @@ export const getAllCurrencies = async () => {
 
 // Get all latest rates
 export const getRates = async () => {
-  const { data } = await axios.get(`${baseUrl2}/latest`);
-  localStorage.setItem("rates", JSON.stringify(data));
+  const { data } = await axios.get(`${baseUrl2}/latest?base=USD`);
   return data;
 };
