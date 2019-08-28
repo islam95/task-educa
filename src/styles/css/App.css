@@ -1,0 +1,11 @@
+@import "~antd/dist/antd.css";
+.center {
+  text-align: center;
+}
+body {
+  text-align: center;
+}
+.header {
+  color: #1890ff;
+  font-size: 24px;
+}
