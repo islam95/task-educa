@@ -4,3 +4,5 @@ export const FETCH_RATES_ERROR = "FETCH_RATES_ERROR";
 
 export const ADD_RATE = "ADD_RATE";
 export const DELETE_RATE = "DELETE_RATE";
+
+export const SELECT_CURRENCY = "SELECT_CURRENCY";

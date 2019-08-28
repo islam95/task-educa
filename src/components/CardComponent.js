@@ -1,7 +1,21 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Statistic, Card, Row, Col, Icon } from "antd";
 
 class CardComponent extends Component {
+
+  state = {
+    rate: 0
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.rates !== prevProps.rates) {
+      const rubRate = this.props.rates.find(rate => rate.code === "RUB")
+      const { rate } = rubRate
+      this.setState({rate})
+    }
+  }
+
   render() {
     return (
       <div style={{ padding: 30 }}>
@@ -11,8 +25,8 @@ class CardComponent extends Component {
               <Col span={12}>
                 <Statistic
                   title="Курс на сегодня"
-                  value={66.28}
-                  prefix={<Icon type="dollar" />}
+                  value={this.state.rate}
+                  suffix="Руб"
                   precision={2}
                 />
               </Col>
@@ -55,4 +69,10 @@ class CardComponent extends Component {
   }
 }
 
-export default CardComponent;
+const mapStateToProps = ({ rates }) => {
+  return {
+    rates: rates.rates
+  };
+};
+
+export default connect(mapStateToProps, null)(CardComponent);

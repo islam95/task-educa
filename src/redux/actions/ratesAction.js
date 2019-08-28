@@ -46,9 +46,14 @@ export const deleteRate = key => {
   return { type: Types.DELETE_RATE, key };
 };
 
-export const addRate = (key, code, rate) => ({
-  type: Types.ADD_RATE,
-  key,
-  code,
-  rate
-});
+export const addRate = rate => {
+  return {
+    type: Types.ADD_RATE,
+    rate
+  };
+};
+
+export const selectCurrency = (currency) => ({
+  type: Types.SELECT_CURRENCY,
+  currency
+})

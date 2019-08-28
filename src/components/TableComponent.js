@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchData, checkLocalStorage, deleteRate } from "../redux/actions/ratesAction";
-import { Card, Table, Row, Col, Button, Icon } from "antd";
+import {
+  fetchData,
+  checkLocalStorage,
+  deleteRate,
+  addRate
+} from "../redux/actions/ratesAction";
+import { selectRate } from "../helpers/api";
+import { Card, Table, Row, Col, Button, Icon, message } from "antd";
+import Currencies from "./Currencies";
 
 class TableComponent extends Component {
   constructor(props) {
     super(props);
-
     this.columns = [
       {
         title: "Код",
@@ -45,7 +51,8 @@ class TableComponent extends Component {
     ];
 
     this.state = {
-      dataSource: []
+      dataSource: [],
+      newRate: {}
     };
   }
 
@@ -73,6 +80,29 @@ class TableComponent extends Component {
   //   percent: 123
   // }
 
+  handleAddRate = async () => {
+    const {rates, currency} = this.props;
+    if(!currency){
+      message.error("Пожалуйста, выберите валюту.")
+    } else if(rates.find(rate => rate.code === currency)){
+      message.error('Такая валюта уже есть в таблице!');
+    } else {
+        try {
+          const response = await selectRate("RUB", currency)
+          const selectedRate = response.rates;
+          const newRate = {
+            key: rates.length + 1,
+            code: currency,
+            rate: selectedRate[currency].toFixed(2)
+          }
+          this.props.handleAdd(newRate)
+          message.success('Валюта успешно добавлена!');
+        } catch(error){
+          console.log("Error selecting rate from api")
+        }
+      }
+  }
+
   render() {
     return (
       <div>
@@ -85,10 +115,14 @@ class TableComponent extends Component {
                   <Button type="primary" onClick={this.fetchApiData}>
                     <Icon type="download" />
                     Загрузить
-                  </Button>{" "}
-                  <Button type="ghost">Добавить</Button>
+                  </Button>
                 </div>
               }
+              actions={[
+                <Button onClick={this.handleAddRate} type="ghost">Добавить</Button>,
+                <Currencies />,
+                null
+              ]}
             >
               <Table
                 columns={this.columns}
@@ -105,14 +139,16 @@ class TableComponent extends Component {
 
 const mapStateToProps = ({ rates }) => {
   return {
-    rates: rates.rates
+    rates: rates.rates,
+    currency: rates.currency
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   onGetRates: () => dispatch(fetchData()),
   onCheckLocalStorage: () => dispatch(checkLocalStorage()),
-  handleDelete: (key) => dispatch(deleteRate(key)) 
+  handleDelete: key => dispatch(deleteRate(key)),
+  handleAdd: rate => dispatch(addRate(rate))
 });
 
 export default connect(
