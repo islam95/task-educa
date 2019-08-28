@@ -3,16 +3,15 @@ import { connect } from "react-redux";
 import { Statistic, Card, Row, Col, Icon } from "antd";
 
 class CardComponent extends Component {
-
   state = {
     rate: 0
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.rates !== prevProps.rates) {
-      const rubRate = this.props.rates.find(rate => rate.code === "RUB")
-      const { rate } = rubRate
-      this.setState({rate})
+      const rubRate = this.props.rates.find(rate => rate.code === "RUB");
+      const { rate } = rubRate;
+      this.setState({ rate });
     }
   }
 
@@ -75,4 +74,7 @@ const mapStateToProps = ({ rates }) => {
   };
 };
 
-export default connect(mapStateToProps, null)(CardComponent);
+export default connect(
+  mapStateToProps,
+  null
+)(CardComponent);

@@ -26,7 +26,7 @@ const Rates = (state = INITIAL_STATE, action) => {
       return { ...state, rates };
 
     case Types.SELECT_CURRENCY:
-      return { ...state, currency: action.currency }
+      return { ...state, currency: action.currency };
 
     default:
       return state;

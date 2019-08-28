@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {selectCurrency} from "../redux/actions/ratesAction";
+import { selectCurrency } from "../redux/actions/ratesAction";
 import { Select } from "antd";
 const { Option } = Select;
 
 class Currencies extends Component {
- 
-  onChange = (currency) => {
-    this.props.onSelectCurrency(currency)
-  }
+  onChange = currency => {
+    this.props.onSelectCurrency(currency);
+  };
 
   render() {
     return (
@@ -34,4 +33,7 @@ const mapDispatchToProps = dispatch => ({
   onSelectCurrency: currency => dispatch(selectCurrency(currency))
 });
 
-export default connect(null, mapDispatchToProps)(Currencies);
+export default connect(
+  null,
+  mapDispatchToProps
+)(Currencies);

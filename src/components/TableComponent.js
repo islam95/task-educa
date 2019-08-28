@@ -81,27 +81,27 @@ class TableComponent extends Component {
   // }
 
   handleAddRate = async () => {
-    const {rates, currency} = this.props;
-    if(!currency){
-      message.error("Пожалуйста, выберите валюту.")
-    } else if(rates.find(rate => rate.code === currency)){
-      message.error('Такая валюта уже есть в таблице!');
+    const { rates, currency } = this.props;
+    if (!currency) {
+      message.error("Пожалуйста, выберите валюту.");
+    } else if (rates.find(rate => rate.code === currency)) {
+      message.error("Такая валюта уже есть в таблице!");
     } else {
-        try {
-          const response = await selectRate("RUB", currency)
-          const selectedRate = response.rates;
-          const newRate = {
-            key: rates.length + 1,
-            code: currency,
-            rate: selectedRate[currency].toFixed(2)
-          }
-          this.props.handleAdd(newRate)
-          message.success('Валюта успешно добавлена!');
-        } catch(error){
-          console.log("Error selecting rate from api")
-        }
+      try {
+        const response = await selectRate("RUB", currency);
+        const selectedRate = response.rates;
+        const newRate = {
+          key: rates.length + 1,
+          code: currency,
+          rate: selectedRate[currency].toFixed(2)
+        };
+        this.props.handleAdd(newRate);
+        message.success("Валюта успешно добавлена!");
+      } catch (error) {
+        console.log("Error selecting rate from api");
       }
-  }
+    }
+  };
 
   render() {
     return (
@@ -119,7 +119,9 @@ class TableComponent extends Component {
                 </div>
               }
               actions={[
-                <Button onClick={this.handleAddRate} type="ghost">Добавить</Button>,
+                <Button onClick={this.handleAddRate} type="ghost">
+                  Добавить
+                </Button>,
                 <Currencies />,
                 null
               ]}

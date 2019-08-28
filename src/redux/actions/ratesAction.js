@@ -53,7 +53,7 @@ export const addRate = rate => {
   };
 };
 
-export const selectCurrency = (currency) => ({
+export const selectCurrency = currency => ({
   type: Types.SELECT_CURRENCY,
   currency
-})
+});

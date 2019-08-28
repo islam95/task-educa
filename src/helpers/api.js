@@ -24,6 +24,8 @@ export const getRates = async () => {
 
 // Get rate data for specific currency
 export const selectRate = async (base, currency) => {
-  const { data } = await axios.get(`${baseUrl2}/latest?base=${base}&symbols=${currency}`)
-  return data
-}
+  const { data } = await axios.get(
+    `${baseUrl2}/latest?base=${base}&symbols=${currency}`
+  );
+  return data;
+};
