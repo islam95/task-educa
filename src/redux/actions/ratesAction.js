@@ -5,11 +5,12 @@ export const fetchData = () => {
   return async dispatch => {
     dispatch({ type: Types.FETCH_RATES });
     try {
-      const rates = await api.getRates();
-      localStorage.setItem("rates", rates);
+      const response = await api.getRates();
+      const { rates } = response;
       dispatch({
         type: Types.FETCH_RATES_SUCCESS,
-        rates
+        rates,
+        response
       });
     } catch (error) {
       dispatch({
@@ -21,13 +22,13 @@ export const fetchData = () => {
 };
 
 // Check local storage 
-export const checkRates = () => {
+export const checkLocalStorage = () => {
   return async dispatch => {
     const rates = localStorage.getItem("rates");
     if (rates) {
       dispatch({
         type: Types.FETCH_RATES_SUCCESS,
-        rates
+        response: JSON.parse(rates)
       });
     }
   };

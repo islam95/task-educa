@@ -1,16 +1,17 @@
 import * as Types from "../actions/types";
 
 const INITIAL_STATE = {
-  rates: []
+  rates: {},
+  response: {}
 };
 
 const Rates = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case Types.FETCH_RATES_SUCCESS:
-      return { ...state, rates: action.rates };
+      return { ...state, rates: action.rates, response: action.response };
 
     case Types.FETCH_RATES_ERROR:
-      return { ...state, rates: [], error: action.error };
+      return { ...state, rates: {}, response: {}, error: action.error };
 
     default:
       return state;
