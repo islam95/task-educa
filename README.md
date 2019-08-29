@@ -20,7 +20,7 @@ When you click on a button "**Загрузить**" it downloads all rates from 
 
 - Base rate is USD. So all rates are equal to 1 USD
 
-You can delete the rate by clicking on track icon. You can also add the rate by selecting the rate and clicking the "**Добавить**" button below.
+You can delete the rate by clicking on trash icon. You can also add the rate by selecting it and clicking the "**Добавить**" button below.
 
 - Table shows the changes of rates since 2019-08-20.
 - When you add the rate it will add it to the end of the table. So don't forget to check the last page of the table.
