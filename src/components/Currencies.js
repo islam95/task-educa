@@ -5,7 +5,7 @@ import { Select } from "antd";
 const { Option } = Select;
 
 class Currencies extends Component {
-  onChange = currency => {
+  handleChange = currency => {
     this.props.onSelectCurrency(currency);
   };
 
@@ -17,7 +17,7 @@ class Currencies extends Component {
         style={{ width: 180 }}
         placeholder="Выберите вaлюту"
         optionFilterProp="children"
-        onChange={this.onChange}
+        onChange={this.handleChange}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
@@ -33,11 +33,9 @@ class Currencies extends Component {
   }
 }
 
-const mapStateToProps = ({ currencies }) => {
-  return {
-    currencies: currencies.currencies
-  };
-};
+const mapStateToProps = ({ currencies }) => ({
+  currencies: currencies.currencies
+});
 
 const mapDispatchToProps = dispatch => ({
   onSelectCurrency: currency => dispatch(selectCurrency(currency))

@@ -25,9 +25,6 @@ const Rates = (state = INITIAL_STATE, action) => {
       localStorage.setItem("rates", JSON.stringify(rates));
       return { ...state, rates };
 
-    case Types.SELECT_CURRENCY:
-      return { ...state, currency: action.currency };
-
     default:
       return state;
   }

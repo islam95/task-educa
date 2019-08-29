@@ -14,6 +14,7 @@ import Currencies from "./Currencies";
 class TableComponent extends Component {
   constructor(props) {
     super(props);
+    // table columns titles
     this.columns = [
       {
         title: "Код",
@@ -51,11 +52,12 @@ class TableComponent extends Component {
     ];
 
     this.state = {
-      dataSource: []
+      dataSource: [] // future table data
     };
   }
 
   componentDidMount() {
+    // Get rates and currencies from local storage if exist
     this.props.onCheckLocalStorage();
   }
 
@@ -64,25 +66,26 @@ class TableComponent extends Component {
     await this.props.onGetCurrencies();
   };
 
-  componentDidUpdate(prevProps) {
-    if (this.props.rates !== prevProps.rates) {
-      const dataSource = this.props.rates.map(rate => {
+  static getDerivedStateFromProps(nextProps, prevState){
+    if (nextProps.rates.length && nextProps.currencies.length) {
+      const dataSource = nextProps.rates.map(rate => {
         const change =
           rate.change > 0 ? (
             <span style={{ color: "green" }}>+{rate.change}</span>
           ) : (
             <span style={{ color: "red" }}>{rate.change}</span>
           );
-        const text = this.props.currencies.find(cur => cur.code === rate.code)
+        // get text names for rates
+        const text = nextProps.currencies.find(cur => cur.code === rate.code)
           .text;
         return { ...rate, change, text };
       });
-      this.setState({
-        dataSource
-      });
+      return { dataSource } // populate the table
     }
+    return null
   }
 
+  // Adds rate
   handleAddRate = async () => {
     const { rates, currency } = this.props;
     if (!currency) {
@@ -96,13 +99,13 @@ class TableComponent extends Component {
         const newRate = {
           key: Math.random() * 1000,
           code: currency,
-          rate: selectedRate[currency].toFixed(2)
+          rate: selectedRate[currency].toFixed(4)
         };
-        this.props.handleAdd(newRate);
-        message.success("Валюта успешно добавлена!");
+        this.props.handleAdd(newRate); // добавит без изменения валюты
+        message.success("Валюта успешно добавлена в конец таблицы!");
       } catch (error) {
-        console.log("Error selecting rate from api");
-        message.error("Ксожалению такой валюты нет в этом api.");
+        console.log("Error selecting rate from api", error);
+        message.error("Произошла ошибка при выборе валюты.");
       }
     }
   };
@@ -111,9 +114,9 @@ class TableComponent extends Component {
     return (
       <div>
         <Row>
-          <Col span={12} offset={6}>
+          <Col md={{ span: 18, offset: 2 }} lg={{ span: 14, offset: 5 }}>
             <Card
-              title="Валюты"
+              title="Валюты (USD)"
               extra={
                 <div>
                   <Button type="primary" onClick={this.fetchApiData}>
@@ -146,7 +149,7 @@ class TableComponent extends Component {
 const mapStateToProps = ({ rates, currencies }) => {
   return {
     rates: rates.rates,
-    currency: rates.currency,
+    currency: currencies.currency,
     currencies: currencies.currencies
   };
 };

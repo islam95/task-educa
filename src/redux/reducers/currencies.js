@@ -12,6 +12,9 @@ const Currencies = (state = INITIAL_STATE, action) => {
     case Types.FETCH_CURRENCIES_ERROR:
       return { ...state, currencies: {}, error: action.error };
 
+    case Types.SELECT_CURRENCY:
+      return { ...state, currency: action.currency };
+
     default:
       return state;
   }

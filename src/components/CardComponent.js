@@ -9,7 +9,7 @@ class CardComponent extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (this.props.rates !== prevProps.rates) {
+    if (this.props.rates !== prevProps.rates && this.props.rates.length) {
       const rubRate = this.props.rates.find(rate => rate.code === "RUB");
       const { rate, change } = rubRate;
       this.setState({ rate, change });
@@ -20,8 +20,13 @@ class CardComponent extends Component {
     const { rate, change } = this.state;
     return (
       <div style={{ padding: 30 }}>
-        <Row type="flex" justify="center">
-          <Col span={6}>
+        <Row>
+          <Col
+            sm={{ span: 16, offset: 3 }}
+            md={{ span: 10, offset: 4 }}
+            lg={{ span: 8, offset: 5 }}
+            xl={{ span: 6, offset: 6 }}
+          >
             <Card title="Доллар США (USD)">
               <Col span={12}>
                 <Statistic
@@ -56,11 +61,9 @@ class CardComponent extends Component {
   }
 }
 
-const mapStateToProps = ({ rates }) => {
-  return {
-    rates: rates.rates
-  };
-};
+const mapStateToProps = ({ rates }) => ({
+  rates: rates.rates
+});
 
 export default connect(
   mapStateToProps,
