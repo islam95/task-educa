@@ -6,12 +6,15 @@ export const fetchData = () => {
     dispatch({ type: Types.FETCH_RATES });
     try {
       const response = await api.getRates();
+      const oldRatesResponse = await api.getOldRates();
       const { rates } = response;
+      const oldRates = oldRatesResponse.rates;
       const newRates = Object.keys(rates).map((code, key) => {
         return {
           key,
           code,
-          rate: rates[code].toFixed(2)
+          rate: rates[code].toFixed(4),
+          change: (rates[code] - oldRates[code]).toFixed(4)
         };
       });
       localStorage.setItem("rates", JSON.stringify(newRates));
@@ -33,10 +36,17 @@ export const fetchData = () => {
 export const checkLocalStorage = () => {
   return async dispatch => {
     const rates = localStorage.getItem("rates");
+    const currencies = localStorage.getItem("currencies");
     if (rates) {
       dispatch({
         type: Types.FETCH_RATES_SUCCESS,
         rates: JSON.parse(rates)
+      });
+    }
+    if (currencies) {
+      dispatch({
+        type: Types.FETCH_CURRENCIES,
+        currencies: JSON.parse(currencies)
       });
     }
   };
@@ -52,8 +62,3 @@ export const addRate = rate => {
     rate
   };
 };
-
-export const selectCurrency = currency => ({
-  type: Types.SELECT_CURRENCY,
-  currency
-});

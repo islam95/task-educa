@@ -6,6 +6,7 @@ import {
   deleteRate,
   addRate
 } from "../redux/actions/ratesAction";
+import { getAllCurrencies } from "../redux/actions/currencies";
 import { selectRate } from "../helpers/api";
 import { Card, Table, Row, Col, Button, Icon, message } from "antd";
 import Currencies from "./Currencies";
@@ -20,23 +21,22 @@ class TableComponent extends Component {
       },
       {
         title: "Валюта",
-        dataIndex: "currency"
+        dataIndex: "text"
       },
       {
         title: "Курс",
-        dataIndex: "rate"
+        dataIndex: "rate",
+        align: "right"
       },
       {
         title: "Изменения",
-        dataIndex: "change"
-      },
-      {
-        title: "%",
-        dataIndex: "percent"
+        dataIndex: "change",
+        align: "right"
       },
       {
         title: "Действия",
         dataIndex: "",
+        align: "right",
         key: "x",
         render: (text, record) => (
           <Button
@@ -51,8 +51,7 @@ class TableComponent extends Component {
     ];
 
     this.state = {
-      dataSource: [],
-      newRate: {}
+      dataSource: []
     };
   }
 
@@ -62,23 +61,27 @@ class TableComponent extends Component {
 
   fetchApiData = async () => {
     await this.props.onGetRates();
+    await this.props.onGetCurrencies();
   };
 
   componentDidUpdate(prevProps) {
     if (this.props.rates !== prevProps.rates) {
+      const dataSource = this.props.rates.map(rate => {
+        const change =
+          rate.change > 0 ? (
+            <span style={{ color: "green" }}>+{rate.change}</span>
+          ) : (
+            <span style={{ color: "red" }}>{rate.change}</span>
+          );
+        const text = this.props.currencies.find(cur => cur.code === rate.code)
+          .text;
+        return { ...rate, change, text };
+      });
       this.setState({
-        dataSource: this.props.rates
+        dataSource
       });
     }
   }
-  // {
-  //   key: "1",
-  //   code: "DFG",
-  //   currency: "A currency name",
-  //   rate: 23453,
-  //   change: 1234,
-  //   percent: 123
-  // }
 
   handleAddRate = async () => {
     const { rates, currency } = this.props;
@@ -88,10 +91,10 @@ class TableComponent extends Component {
       message.error("Такая валюта уже есть в таблице!");
     } else {
       try {
-        const response = await selectRate("RUB", currency);
+        const response = await selectRate(currency);
         const selectedRate = response.rates;
         const newRate = {
-          key: rates.length + 1,
+          key: Math.random() * 1000,
           code: currency,
           rate: selectedRate[currency].toFixed(2)
         };
@@ -99,6 +102,7 @@ class TableComponent extends Component {
         message.success("Валюта успешно добавлена!");
       } catch (error) {
         console.log("Error selecting rate from api");
+        message.error("Ксожалению такой валюты нет в этом api.");
       }
     }
   };
@@ -139,15 +143,17 @@ class TableComponent extends Component {
   }
 }
 
-const mapStateToProps = ({ rates }) => {
+const mapStateToProps = ({ rates, currencies }) => {
   return {
     rates: rates.rates,
-    currency: rates.currency
+    currency: rates.currency,
+    currencies: currencies.currencies
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   onGetRates: () => dispatch(fetchData()),
+  onGetCurrencies: () => dispatch(getAllCurrencies()),
   onCheckLocalStorage: () => dispatch(checkLocalStorage()),
   handleDelete: key => dispatch(deleteRate(key)),
   handleAdd: rate => dispatch(addRate(rate))

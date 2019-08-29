@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { selectCurrency } from "../redux/actions/ratesAction";
+import { selectCurrency } from "../redux/actions/currencies";
 import { Select } from "antd";
 const { Option } = Select;
 
@@ -10,30 +10,40 @@ class Currencies extends Component {
   };
 
   render() {
+    const { currencies } = this.props;
     return (
       <Select
         showSearch
-        style={{ width: 200 }}
-        placeholder="Выберите вылюту"
+        style={{ width: 180 }}
+        placeholder="Выберите вaлюту"
         optionFilterProp="children"
         onChange={this.onChange}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        <Option value="USD">USD</Option>
-        <Option value="DGF">DGF</Option>
-        <Option value="TOM">TOM</Option>
+        {currencies.length &&
+          currencies.map(cur => (
+            <Option key={cur.key} value={cur.code}>
+              {cur.code}
+            </Option>
+          ))}
       </Select>
     );
   }
 }
+
+const mapStateToProps = ({ currencies }) => {
+  return {
+    currencies: currencies.currencies
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   onSelectCurrency: currency => dispatch(selectCurrency(currency))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Currencies);

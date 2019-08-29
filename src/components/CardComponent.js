@@ -4,18 +4,20 @@ import { Statistic, Card, Row, Col, Icon } from "antd";
 
 class CardComponent extends Component {
   state = {
-    rate: 0
+    rate: 0,
+    change: 0
   };
 
   componentDidUpdate(prevProps) {
     if (this.props.rates !== prevProps.rates) {
       const rubRate = this.props.rates.find(rate => rate.code === "RUB");
-      const { rate } = rubRate;
-      this.setState({ rate });
+      const { rate, change } = rubRate;
+      this.setState({ rate, change });
     }
   }
 
   render() {
+    const { rate, change } = this.state;
     return (
       <div style={{ padding: 30 }}>
         <Row type="flex" justify="center">
@@ -24,7 +26,7 @@ class CardComponent extends Component {
               <Col span={12}>
                 <Statistic
                   title="Курс на сегодня"
-                  value={this.state.rate}
+                  value={rate}
                   suffix="Руб"
                   precision={2}
                 />
@@ -32,32 +34,18 @@ class CardComponent extends Component {
               <Col span={12}>
                 <Statistic
                   title="Изменения"
-                  value={70.34}
-                  valueStyle={{ color: "#3f8600" }}
-                  prefix={<Icon type="arrow-up" />}
+                  value={change}
+                  valueStyle={
+                    change > 0 ? { color: "#3f8600" } : { color: "#f5222d" }
+                  }
+                  prefix={
+                    change > 0 ? (
+                      <Icon type="arrow-up" />
+                    ) : (
+                      <Icon type="arrow-down" />
+                    )
+                  }
                   precision={2}
-                />
-              </Col>
-            </Card>
-          </Col>
-          <Col span={6} offset={1}>
-            <Card title="Евро (EUR)">
-              <Col span={12}>
-                <Statistic
-                  title="Курс на сегодня"
-                  value={93.243}
-                  prefix={<Icon type="euro" />}
-                  precision={2}
-                />
-              </Col>
-              <Col span={12}>
-                <Statistic
-                  title="Изменения"
-                  value={9.3}
-                  precision={2}
-                  valueStyle={{ color: "#cf1322" }}
-                  prefix={<Icon type="arrow-down" />}
-                  suffix="%"
                 />
               </Col>
             </Card>
