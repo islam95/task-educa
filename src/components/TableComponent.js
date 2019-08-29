@@ -66,7 +66,7 @@ class TableComponent extends Component {
     await this.props.onGetCurrencies();
   };
 
-  static getDerivedStateFromProps(nextProps, prevState){
+  static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.rates.length && nextProps.currencies.length) {
       const dataSource = nextProps.rates.map(rate => {
         const change =
@@ -80,9 +80,9 @@ class TableComponent extends Component {
           .text;
         return { ...rate, change, text };
       });
-      return { dataSource } // populate the table
+      return { dataSource }; // populate the table
     }
-    return null
+    return null;
   }
 
   // Adds rate
